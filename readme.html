@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRD: Smart Rebate & Voucher Hub</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #1a202c;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-top: 24px;
+        }
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5em; }
+        h3 { font-size: 1.25em; border-bottom: none; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #cbd5e0;
+            padding: 12px;
+            text-align: left;
+        }
+        th { background-color: #f7fafc; font-weight: bold; }
+        ul, ol { margin-left: 20px; }
+        li { margin-bottom: 8px; }
+        code {
+            background-color: #edf2f7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        blockquote {
+            border-left: 4px solid #4299e1;
+            margin: 0;
+            padding: 10px 20px;
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PRD: Smart Rebate & Voucher Hub (MVP)</h1>
+
+        <h2>1. Tổng quan dự án (Executive Summary)</h2>
+        <ul>
+            <li><strong>Mục tiêu:</strong> Xây dựng nền tảng Web App Affiliate kết hợp hoàn tiền (Cashback) theo mô hình "Crowdsourced Links". Người dùng tự dán link sản phẩm muốn mua từ sàn TMĐT (Shopee), hệ thống chuyển đổi thành link affiliate và chia sẻ lại % hoa hồng dưới dạng hoàn tiền.</li>
+            <li><strong>Chiến lược Giai đoạn MVP:</strong> Tối ưu hóa chuyển đổi bằng phương pháp "Lazy Login" (Trải nghiệm trước, đăng nhập sau). Tập trung vào giao diện Mobile-first (Zalo/Messenger in-app browser) và xử lý rút tiền thủ công (Manual Cashout) để giảm thiểu rủi ro kỹ thuật.</li>
+            <li><strong>Tech Stack:</strong> Next.js (App Router), React, Tailwind CSS, Supabase (PostgreSQL, Auth).</li>
+        </ul>
+
+        <h2>2. Phạm vi Giai đoạn MVP (Scope)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>In Scope (Nằm trong MVP)</th>
+                    <th>Out of Scope (Không làm trong MVP)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Chuyển đổi link Shopee sang link Affiliate</td>
+                    <td>Tích hợp Tiktok Shop, Lazada, Tiki</td>
+                </tr>
+                <tr>
+                    <td>Tracking đơn hàng qua Affiliate Network (AccessTrade/Ecomobi)</td>
+                    <td>Cào (Crawl) dữ liệu Voucher tự động</td>
+                </tr>
+                <tr>
+                    <td>Quản lý Ví tích lũy & Lịch sử giao dịch</td>
+                    <td>Tích hợp Cổng thanh toán (Payment Gateway) tự động</td>
+                </tr>
+                <tr>
+                    <td>Đăng nhập ẩn danh (Anonymous) & Xác thực qua OAuth (Zalo/Google)</td>
+                    <td>Đăng nhập truyền thống (Email/Mật khẩu/OTP)</td>
+                </tr>
+                <tr>
+                    <td>Xử lý rút tiền thủ công (Admin Dashboard nội bộ)</td>
+                    <td>Hệ thống phân hạng thành viên (Gamification)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>3. Cấu trúc màn hình & User Stories (Epics)</h2>
+
+        <h3>Epic 1: Luồng tạo link & Trải nghiệm không ma sát (Frictionless Onboarding)</h3>
+        <ul>
+            <li><strong>US1.1:</strong> Là một người dùng ẩn danh, tôi có thể dán link Shopee vào trang chủ và nhận lại link đã chuyển đổi để mua hàng mà không cần tạo tài khoản.</li>
+            <li><strong>US1.2:</strong> Là hệ thống, tôi phải ngầm tạo một Anonymous Session (Supabase Auth) lưu trên trình duyệt để ghi nhận dữ liệu cho người dùng này.</li>
+            <li><strong>Giao diện:</strong>
+                <ul>
+                    <li>Trang chủ chứa 1 Input Field lớn.</li>
+                    <li>State 1: Nhập link. State 2: Hiển thị thông tin sản phẩm dự kiến và nút CTA "Đến sàn mua ngay" (kèm cảnh báo mở bằng trình duyệt gốc).</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Epic 2: Sổ cái & Lịch sử giao dịch (Ledger & History)</h3>
+        <ul>
+            <li><strong>US2.1:</strong> Là người dùng, tôi có thể xem tổng "Số dư khả dụng" và "Số dư chờ đối soát" tại màn hình Ví (Wallet).</li>
+            <li><strong>US2.2:</strong> Là người dùng, tôi có thể xem danh sách lịch sử các lần click/mua hàng với 3 trạng thái phân biệt bằng màu sắc: Pending (Chờ đối soát), Approved (Thành công), Rejected (Hủy/Hoàn).</li>
+            <li><strong>Giao diện:</strong> Tab điều hướng (Bottom Navigation Bar) cố định ở đáy màn hình gồm: Tạo Link, Ví, Lịch sử, Cá nhân.</li>
+        </ul>
+
+        <h3>Epic 3: Rút tiền thủ công & Định danh (Manual Cashout & Auth)</h3>
+        <ul>
+            <li><strong>US3.1:</strong> Khi số dư khả dụng ≥ 50.000đ, tôi có thể bấm nút "Yêu cầu rút tiền".</li>
+            <li><strong>US3.2:</strong> Nếu tôi đang dùng tài khoản ẩn danh, hệ thống sẽ bật Popup yêu cầu "Liên kết tài khoản" (Link Identity) qua Social Login (Zalo/Google) trước khi cho phép rút tiền.</li>
+            <li><strong>US3.3:</strong> Là quản trị viên, tôi có một trang Admin ẩn (<code>/admin/cashout-requests</code>) hiển thị danh sách các lệnh rút tiền pending để tôi đi chuyển khoản thủ công, kèm nút "Đã thanh toán" để gạch nợ trên hệ thống.</li>
+        </ul>
+
+        <h2>4. Tiêu chuẩn thiết kế & Kỹ thuật (Acceptance Criteria)</h2>
+
+        <h3>4.1. UI/UX (Tailwind CSS)</h3>
+        <ul>
+            <li><strong>Luật Layout:</strong> Toàn bộ giao diện Web phải được bọc trong một Container mô phỏng thiết bị di động bằng class Tailwind: <code>w-full max-w-md mx-auto min-h-screen border-x</code>.</li>
+            <li>Không được tràn viền hoặc co giãn các khối nội dung tràn màn hình khi xem trên Desktop.</li>
+            <li>Sử dụng <code>lucide-react</code> cho toàn bộ icon trong dự án.</li>
+        </ul>
+
+        <h3>4.2. Database Schema Cốt lõi (Supabase)</h3>
+        <p>Hệ thống cần 3 bảng chính:</p>
+        <ol>
+            <li><strong><code>profiles</code>:</strong> Lưu thông tin user đã định danh (merge từ bảng <code>auth.users</code> của Supabase) và thông tin tài khoản ngân hàng (Bank name, Account Number, Account Holder).</li>
+            <li><strong><code>transactions</code>:</strong> Ghi nhận mọi giao dịch tạo từ link.
+                <ul>
+                    <li>Trường dữ liệu: <code>id</code>, <code>user_id</code> (Anonymous hoặc Authenticated), <code>original_link</code>, <code>affiliate_link</code>, <code>expected_cashback</code>, <code>status</code> (pending, approved, rejected), <code>created_at</code>.</li>
+                </ul>
+            </li>
+            <li><strong><code>withdrawals</code>:</strong> Ghi nhận lệnh rút tiền.
+                <ul>
+                    <li>Trường dữ liệu: <code>id</code>, <code>user_id</code>, <code>amount</code>, <code>bank_details</code> (JSON), <code>status</code> (pending, completed), <code>created_at</code>.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>4.3. Bảo mật & Data Integrity</h3>
+        <ul>
+            <li>Tất cả các API route xử lý tiền bạc (như tạo lệnh rút tiền) phải được bọc bằng Middleware kiểm tra Session hợp lệ trên Server-side.</li>
+            <li>Chỉ áp dụng Row Level Security (RLS) trên Supabase cho phép user chỉ xem/sửa được dữ liệu (<code>transactions</code>, <code>withdrawals</code>) của chính <code>user_id</code> của họ.</li>
+        </ul>
+
+        <hr>
+        <blockquote>
+            <strong>Hướng dẫn triển khai cho Claude Code (Prompt nội bộ):</strong><br>
+            Nhận diện tài liệu này là PRD gốc. Hãy bắt đầu bằng việc khởi tạo dự án Next.js theo cấu trúc App Router. Thiết lập Tailwind CSS với <code>max-w-md</code>. Sau đó tạo các file SQL Migration cho cấu trúc Database đã định nghĩa ở mục 4.2. Không viết toàn bộ code cùng lúc, hãy xác nhận bạn đã hiểu PRD và chờ lệnh thực hiện từng Epic.
+        </blockquote>
+    </div>
+</body>
+</html>

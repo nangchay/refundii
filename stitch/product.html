@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fbf9f8;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .orbital-arc {
+            position: absolute;
+            border: 1.5px solid #CF4500;
+            border-radius: 50%;
+            border-top-color: transparent;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            transform: rotate(-45deg);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f2f0f0",
+                        "surface": "#fbf9f8",
+                        "surface-container-low": "#f5f3f3",
+                        "surface-container-high": "#e9e8e7",
+                        "on-tertiary-container": "#d85f25",
+                        "surface-dim": "#dbdad9",
+                        "outline": "#767872",
+                        "on-primary-fixed-variant": "#474745",
+                        "background": "#fbf9f8",
+                        "secondary": "#5f5e5d",
+                        "on-background": "#1b1c1c",
+                        "on-surface": "#1b1c1c",
+                        "inverse-primary": "#c9c6c4",
+                        "surface-container": "#efeded",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#474745",
+                        "primary-fixed": "#e5e2e0",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fbf9f8",
+                        "inverse-surface": "#303031",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#1c1c1a",
+                        "surface-variant": "#e4e2e2",
+                        "on-tertiary-fixed-variant": "#7e2c00",
+                        "white": "#FFFFFF",
+                        "lifted-cream": "#FCFBFA",
+                        "secondary-fixed": "#e5e2e0",
+                        "primary-fixed-dim": "#c9c6c4",
+                        "primary": "#000000",
+                        "tertiary-fixed": "#ffdbcd",
+                        "signal-orange": "#CF4500",
+                        "secondary-container": "#e2dfdd",
+                        "error": "#ba1a1a",
+                        "tertiary": "#000000",
+                        "link-blue": "#3860BE",
+                        "surface-tint": "#5f5e5d",
+                        "on-primary-container": "#858382",
+                        "on-primary-fixed": "#1c1c1a",
+                        "secondary-fixed-dim": "#c8c6c4",
+                        "outline-variant": "#c7c7c0",
+                        "on-surface-variant": "#464742",
+                        "dust-taupe": "#D1CDC7",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#1c1c1b",
+                        "tertiary-fixed-dim": "#ffb598",
+                        "tertiary-container": "#360f00",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-secondary-container": "#636261"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "section-v-desktop": "128px",
+                        "card-padding": "32px",
+                        "nav-offset": "24px",
+                        "section-v-mobile": "48px",
+                        "gutter": "48px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "footer-link": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "eyebrow": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["40px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "headline-lg": ["64px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "footer-link": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "450"}],
+                        "headline-md": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "eyebrow": ["14px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "700"}],
+                        "headline-sm": ["24px", {"lineHeight": "28.8px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "22.4px", "letterSpacing": "0em", "fontWeight": "450"}],
+                        "label-md": ["16px", {"lineHeight": "16px", "letterSpacing": "-0.03em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col items-center">
+<!-- TopAppBar -->
+<header class="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-lg rounded-full z-50 bg-white/80 backdrop-blur-lg shadow-[0_8px_32px_rgba(0,0,0,0.04)] flex justify-between items-center px-6 py-3 border border-white/20">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="A professional studio headshot of a stylish young person with a friendly expression. The lighting is soft and cinematic, set against a clean, neutral cream-toned background that matches a high-end editorial aesthetic. The image is crisp, modern, and exudes a sense of premium lifestyle and reliability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_Cj5Q8Ue1oX_HeddG50BySpKygByMcaEkqm-Usf8JDeOr2B7TH0d8neSmRn91jYx5U-Sa4iBXuCE4zSLuFKo4km3LdJ6T7oRck1-bn9yZQncYuKnZHugMp9FZ_MEc3mjmbzx3c6Qd4MR_DlZsihCUPvHpUHqRX84uNzYN-6epAeYTXpXtI2tP4B3nI0720NqYlsMoifAc5szjYhoxyIZtRcyvcKoF-IJSNNR-YyXVLQV59WVIIbZiaoW9Zvt9KbNtWbEHxQe533mW"/>
+</div>
+</div>
+<h1 class="font-headline-sm text-headline-sm tracking-tighter text-primary">SÀNH</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-primary">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-lg px-6 pt-32 pb-40 flex flex-col items-center">
+<!-- Results Card -->
+<section class="w-full bg-lifted-cream rounded-[40px] p-8 shadow-[0_48px_80px_rgba(0,0,0,0.06)] relative overflow-hidden flex flex-col items-center text-center">
+<!-- Circular Portrait with Satellite CTA -->
+<div class="relative w-48 h-48 mb-8">
+<!-- Orbital Arc Decoration -->
+<div class="orbital-arc w-[210px] h-[210px] -top-[11px] -left-[11px]"></div>
+<!-- Main Thumbnail -->
+<div class="w-full h-full rounded-full border-4 border-white shadow-lg overflow-hidden z-10 relative bg-white">
+<img alt="Product" class="w-full h-full object-cover" data-alt="A sleek, minimalist designer product shot on a warm cream background. The item is a high-end luxury accessory with clean lines and premium materials. The lighting is soft and directional, creating gentle shadows that emphasize the product's sophisticated texture and geometric form. The overall mood is exclusive, modern, and editorial." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcMHbvMsVjXiwAaqTXI6lF7SRIsj9CttkB2DhaV__HlkHQzve3H8SK3SYfJmiDIE4pWmYsHSFx4XJMA9nLWNLeFTA3uR6h8URmbvnmGolHimVwrr3OLO-yDXm0sph2RE7wbDJrzWQudruP3ki7DNGqqOpQpoifNRwfHMJH8N5H5rwRyaHSW4FKE1ay5fi0MQm9hb_D00KTHqcTyFCprPGvtFgudnFhYAS0a3Aoj6oVo6JitxxK8Lcg7yUmRSKna2PBm4-Rlr4m4-nK"/>
+</div>
+<!-- Satellite CTA Button -->
+<button class="absolute bottom-1 right-1 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center z-20 border border-surface-container hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-primary text-[24px]">north_east</span>
+</button>
+</div>
+<!-- Product Details -->
+<div class="mb-6">
+<div class="flex justify-center items-center gap-2 mb-2">
+<span class="w-2 h-2 rounded-full bg-signal-orange"></span>
+<p class="font-eyebrow text-eyebrow text-on-surface-variant uppercase tracking-widest">Sẵn sàng nhận thưởng</p>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-primary mb-2 px-4">Tai nghe không dây Premium Noise-Cancelling</h2>
+</div>
+<!-- Cashback Highlight -->
+<div class="bg-surface-container-low rounded-3xl py-6 px-4 mb-10 w-full">
+<p class="font-body-md text-body-md text-on-surface-variant mb-1">Hoàn tiền dự kiến</p>
+<p class="font-headline-md text-headline-md text-primary font-bold">~15.000đ <span class="text-signal-orange">(5%)</span></p>
+</div>
+<!-- Primary Action -->
+<button class="w-full bg-primary text-on-primary py-5 rounded-full font-label-md text-label-md tracking-tight hover:opacity-90 active:scale-[0.98] transition-all duration-200 mb-6 flex items-center justify-center gap-2">
+                Đến nơi mua &amp; Nhận tiền
+                <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+</button>
+<!-- Safety Notice -->
+<div class="flex gap-3 text-left">
+<span class="material-symbols-outlined text-signal-orange text-[18px] shrink-0">info</span>
+<p class="font-body-md text-[13px] leading-relaxed text-on-surface-variant">
+                    Lưu ý: Không đổi thiết bị, không thêm vào giỏ hàng trước. Phải hoàn tất thanh toán trong vòng 24h để đảm bảo nhận được hoàn tiền.
+                </p>
+</div>
+</section>
+<!-- Secondary Info / Feature Bento (Micro) -->
+<div class="w-full mt-8 grid grid-cols-2 gap-4">
+<div class="bg-white rounded-[32px] p-6 shadow-sm border border-surface-container-high">
+<span class="material-symbols-outlined text-primary mb-3">verified</span>
+<p class="font-label-md text-label-md text-primary">Xác thực nhanh</p>
+<p class="text-[12px] text-on-surface-variant mt-1">Dưới 15 phút</p>
+</div>
+<div class="bg-white rounded-[32px] p-6 shadow-sm border border-surface-container-high">
+<span class="material-symbols-outlined text-primary mb-3">account_balance_wallet</span>
+<p class="font-label-md text-label-md text-primary">Rút tiền mặt</p>
+<p class="text-[12px] text-on-surface-variant mt-1">Về ví tức thì</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-md rounded-full z-50 bg-white shadow-[0_24px_48px_rgba(0,0,0,0.08)] flex justify-around items-center p-2">
+<a class="flex flex-col items-center justify-center bg-primary text-on-primary rounded-full px-5 py-2 active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="local_mall">local_mall</span>
+<span class="font-label-md text-[12px] mt-0.5">Săn Deal</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-2 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-md text-[12px] mt-0.5">Ví</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-2 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-md text-[12px] mt-0.5">Lịch sử</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-2 hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-[12px] mt-0.5">Cá nhân</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for the satellite CTA
+        const satelliteBtn = document.querySelector('button.absolute');
+        if (satelliteBtn) {
+            satelliteBtn.addEventListener('mousedown', () => {
+                satelliteBtn.style.transform = 'scale(0.9)';
+            });
+            satelliteBtn.addEventListener('mouseup', () => {
+                satelliteBtn.style.transform = 'scale(1.1)';
+            });
+        }
+        
+        // Simple entry animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const card = document.querySelector('section');
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body></html>
