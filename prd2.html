@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRD #2: Refundii (Shopee Direct API Engine)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 leading-relaxed antialiased">
+
+    <div class="max-w-4xl mx-auto my-10 p-8 bg-white shadow-sm rounded-xl border border-gray-200">
+        
+        <div class="border-b border-gray-200 pb-6 mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">PRD #2: Refundii (Shopee Direct Engine)</h1>
+            <p class="mt-2 text-sm text-gray-500">Tài liệu Yêu cầu Hệ thống - Core Logic kết nối API Shopee Open Platform</p>
+        </div>
+
+        <section class="mb-10">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-l-4 border-blue-500 pl-3">1. Tổng quan Kiến trúc (Architecture Overview)</h2>
+            <ul class="list-disc pl-6 space-y-3 text-gray-700">
+                <li><strong class="text-gray-900">Mục tiêu:</strong> Tối ưu hóa 100% biên lợi nhuận bằng cách kết nối trực tiếp với Shopee Affiliate, loại bỏ mạng lưới trung gian.</li>
+                <li><strong class="text-gray-900">Nền tảng Tích hợp:</strong> Shopee Open Platform (Affiliate API).</li>
+                <li><strong class="text-gray-900">Phương pháp Tracking:</strong> Sử dụng tham số <code class="bg-gray-100 px-1 rounded text-pink-600">sub_id</code> (truyền ID Tên Ví) trong API tạo link của Shopee để đối soát 1-1.</li>
+            </ul>
+        </section>
+
+        <section class="mb-10">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-l-4 border-blue-500 pl-3">2. Core Epics & Acceptance Criteria</h2>
+            
+            <div class="mb-6 bg-gray-50 p-5 rounded-lg border border-gray-100">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Epic 1: Product Fetching (Bóc tách dữ liệu sản phẩm)</h3>
+                <div class="p-4 bg-white border border-gray-200 rounded-md">
+                    <h4 class="font-bold text-sm text-gray-800 mb-2 flex items-center">✅ Tiêu chuẩn nghiệm thu (AC)</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-xs text-gray-600">
+                        <li>Sử dụng Web Scraping (cheerio) đọc thẻ <code class="bg-gray-100 px-1">og:title</code> và <code class="bg-gray-100 px-1">og:image</code> từ link Shopee người dùng dán vào để tối ưu tốc độ, không chờ API Shopee.</li>
+                        <li>Nếu bị Shopee chặn bot cào, kích hoạt Fallback: Trả về Tên "Sản phẩm Shopee" và Ảnh mặc định để luồng người dùng không bị gián đoạn.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mb-6 bg-gray-50 p-5 rounded-lg border border-gray-100">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Epic 2: Shopee Deep Link Generation (Tạo link hoàn tiền)</h3>
+                <div class="p-4 bg-white border border-gray-200 rounded-md">
+                    <h4 class="font-bold text-sm text-gray-800 mb-2 flex items-center">✅ Tiêu chuẩn nghiệm thu (AC)</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-xs text-gray-600">
+                        <li>Backend xây dựng service mã hóa tham số bảo mật (HMAC-SHA256) theo chuẩn tài liệu Shopee Open Platform.</li>
+                        <li>Gọi API <code class="bg-gray-100 px-1">generate_short_link</code> của Shopee, truyền URL sản phẩm.</li>
+                        <li><strong class="text-blue-600">Tracking:</strong> Đẩy <code class="bg-gray-100 px-1">wallet_id</code> (Lấy từ profile user) vào trường <code class="bg-gray-100 px-1">sub_id</code> trong payload API.</li>
+                        <li>Link Universal rút gọn do Shopee trả về (VD: shope.ee/...) sẽ được gắn vào nút CTA mua hàng.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mb-6 bg-gray-50 p-5 rounded-lg border border-gray-100">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Epic 3: Thuật toán Tạm tính (Expected Cashback)</h3>
+                <div class="p-4 bg-white border border-gray-200 rounded-md">
+                    <h4 class="font-bold text-sm text-gray-800 mb-2 flex items-center">✅ Tiêu chuẩn nghiệm thu (AC)</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-xs text-gray-600">
+                        <li>Sử dụng mức hoa hồng giả định (Average Commission = 3%) nhân với (User Share = 70%) để hiển thị trên UI.</li>
+                        <li>Thiết lập chặn trần hiển thị (Cap limit) là 15.000đ. Luôn hiển thị kèm dấu "~" (VD: ~ 12.500đ).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mb-6 bg-gray-50 p-5 rounded-lg border border-gray-100">
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Epic 4: Dual Sync Postback (Đối soát dữ liệu)</h3>
+                <div class="p-4 bg-white border border-gray-200 rounded-md">
+                    <h4 class="font-bold text-sm text-gray-800 mb-2 flex items-center">✅ Tiêu chuẩn nghiệm thu (AC)</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-xs text-gray-600">
+                        <li><strong class="text-blue-600">Webhook (Push):</strong> Mở endpoint <code class="bg-gray-100 px-1">/api/webhooks/shopee</code> nhận thông báo đơn hàng từ Shopee. Bóc tách <code class="bg-gray-100 px-1">sub_id</code> để cập nhật tiền vào <code class="bg-gray-100 px-1">transactions</code>.</li>
+                        <li><strong class="text-blue-600">Polling (Pull) - Fallback:</strong> Xây dựng một Cronjob định kỳ (VD: 30 phút/lần) gọi API <code class="bg-gray-100 px-1">get_conversion_report</code> của Shopee để đối soát lại những đơn hàng mà Webhook có thể bị rớt do lỗi mạng.</li>
+                        <li>Tính toán số tiền chốt: <code class="bg-gray-100 px-1">Actual Cashback = Shopee Commission * 70%</code>.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-10">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-l-4 border-blue-500 pl-3">3. Database Schema Updates (Supabase)</h2>
+            <div class="overflow-x-auto rounded-lg border border-gray-200">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Column Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data Type</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description / Logic</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">id</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">uuid</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">Primary Key</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">wallet_id</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">uuid</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">Foreign key mapping tới bảng profiles</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">order_code</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">text (nullable)</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">Mã đơn hàng Shopee trả về qua API</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">expected_cashback</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">numeric</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">Số tiền dự kiến cào được lúc tạo link</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">actual_cashback</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">numeric</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">Số tiền thật chốt từ API Conversion</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">status</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">enum</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">created / pending / approved / rejected</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg">
+            <h4 class="text-blue-800 font-bold mb-2 uppercase text-sm tracking-wider">💡 Hướng dẫn cho AI (Claude Code)</h4>
+            <p class="text-blue-900 text-sm mb-3">
+                <strong>Giai đoạn MVP Mocking:</strong> API của Shopee Open Platform cần thời gian để xin cấp quyền. Trong quá trình code hiện tại, BẮT BUỘC sử dụng Mô hình Dữ liệu Giả lập (Mock Service). Viết các hàm giả lập việc sinh mã HMAC, giả lập API gọi đến Shopee và tự động trả về một link <code>shope.ee/mock_link</code> sau 1 giây.
+            </p>
+            <p class="text-blue-900 text-sm">
+                Khi tài khoản Shopee Developer được duyệt, chúng ta chỉ việc thay thế logic bên trong file Service này bằng thư viện Axios gọi HTTP thực tế, toàn bộ hệ thống UI và Database bên ngoài không bị ảnh hưởng.
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>

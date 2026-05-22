@@ -1,135 +1,205 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import BottomNav from "@/components/BottomNav";
+import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function ProfilePage() {
+  const router = useRouter();
+  const { user, profile, loading, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+  };
+
+  if (loading) {
+    return (
+      <div className="bg-tertiary-fixed/10 min-h-screen flex items-center justify-center">
+        <span className="material-symbols-outlined animate-spin text-signal-orange text-4xl">progress_activity</span>
+      </div>
+    );
+  }
+
   return (
-    <>
-      {/* TopAppBar */}
-      <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-lg rounded-full z-50 bg-white/80 backdrop-blur-lg shadow-nav flex justify-between items-center px-6 py-3">
-        <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center bg-surface-container">
-          <div className="w-full h-full bg-gradient-to-br from-signal-orange/20 to-primary/10" />
+    <div className="bg-tertiary-fixed/10 text-on-surface min-h-screen overflow-x-hidden">
+      {/* Top AppBar */}
+      <header className="bg-surface/80 backdrop-blur-md shadow-sm w-full z-50 fixed top-0 left-0">
+        <div className="flex justify-between items-center px-6 py-4 max-w-md mx-auto">
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="Refundii" className="h-12 w-auto" />
+            <span className="text-headline-sm font-bold bg-gradient-to-r from-signal-orange to-tertiary-fixed-dim bg-clip-text text-transparent">Refundii</span>
+          </div>
+          <button className="material-symbols-outlined text-secondary active:scale-95 transition-transform">notifications</button>
         </div>
-        <div className="text-headline-sm tracking-tighter text-primary font-medium">SÀNH</div>
-        <button className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors active:scale-95 duration-200">
-          <span className="material-symbols-outlined text-primary">notifications</span>
-        </button>
       </header>
 
-      <main className="pt-32 pb-40 px-6 max-w-md mx-auto">
-        {/* Profile Header Section */}
-        <section className="flex flex-col items-center mb-12">
-          <div className="relative mb-6">
-            {/* Orbital Arc Decoration */}
-            <div
-              className="absolute -inset-2 rounded-full border-[1.5px] border-signal-orange rotate-45 opacity-60"
-              style={{ borderBottomColor: "transparent", borderLeftColor: "transparent" }}
-            ></div>
-            {/* Main Avatar Container */}
-            <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden relative z-10 bg-surface-container flex items-center justify-center">
-              <span className="material-symbols-outlined text-primary text-[64px]">person</span>
-            </div>
-            {/* Satellite CTA */}
-            <button className="absolute bottom-0 right-0 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center z-20 hover:scale-105 transition-transform">
-              <span className="material-symbols-outlined text-primary">edit</span>
-            </button>
-          </div>
-          <div className="text-center">
-            <h1 className="text-headline-sm text-primary mb-1">Tên người dùng</h1>
-            <p className="text-label-md text-secondary tracking-tight">user.premium@email.com</p>
-            <div className="mt-4 flex gap-2 justify-center">
-              <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold rounded-full tracking-widest uppercase">
-                Thành viên vàng
-              </span>
-            </div>
-          </div>
-        </section>
+      <main className="max-w-md mx-auto px-6 pt-24 pb-32 space-y-8 overflow-hidden">
+        {user && profile ? (
+          <LoggedInProfile profile={profile} onLogout={handleLogout} />
+        ) : (
+          <>
+            <GuestProfile />
 
-        {/* Account Sections */}
-        <div className="space-y-6">
-          {/* Payment Settings */}
-          <div>
-            <div className="flex items-center gap-2 mb-3 px-2">
-              <div className="w-2 h-2 rounded-full bg-signal-orange"></div>
-              <span className="text-eyebrow text-secondary uppercase tracking-widest">Thanh toán</span>
-            </div>
-            <div className="bg-lifted-cream rounded-[40px] p-6 shadow-sm border border-white/50 space-y-4">
-              <button className="w-full flex items-center justify-between group">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center group-hover:bg-primary transition-colors">
-                    <span className="material-symbols-outlined text-primary group-hover:text-white">
-                      account_balance
-                    </span>
+            {/* Zalo Action Button */}
+            <section>
+              <a
+                className="w-full bg-[#0068FF] hover:opacity-90 active:scale-[0.98] transition-all py-4 px-6 rounded-full flex items-center justify-between shadow-lg shadow-blue-500/20 group"
+                href="#"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="bg-white/20 p-2 rounded-full">
+                    <span className="material-symbols-outlined text-white" style={{ fontVariationSettings: "'wght' 500" }}>support_agent</span>
                   </div>
-                  <div className="text-left">
-                    <p className="text-label-md text-primary">Tài khoản nhận tiền</p>
-                    <p className="text-xs text-secondary">Ngân hàng MB Bank • ••88</p>
+                  <div>
+                    <p className="text-white font-bold leading-tight">Hỗ trợ qua Zalo</p>
+                    <p className="text-white/70 text-[12px]">Phản hồi ngay trong 5 phút</p>
                   </div>
                 </div>
-                <span className="material-symbols-outlined text-secondary group-hover:translate-x-1 transition-transform">
-                  chevron_right
-                </span>
-              </button>
-            </div>
-          </div>
+                <div className="bg-white w-10 h-10 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                  <span className="material-symbols-outlined text-[#0068FF]">arrow_forward</span>
+                </div>
+              </a>
+            </section>
 
-          {/* Support & Policy */}
-          <div>
-            <div className="flex items-center gap-2 mb-3 px-2">
-              <div className="w-2 h-2 rounded-full bg-dust-taupe"></div>
-              <span className="text-eyebrow text-secondary uppercase tracking-widest">
-                Hỗ trợ & Pháp lý
-              </span>
-            </div>
-            <div className="bg-lifted-cream rounded-[40px] p-2 shadow-sm border border-white/50">
-              <div className="flex flex-col">
-                <button className="flex items-center justify-between p-4 hover:bg-surface-container-low rounded-[32px] transition-colors group">
-                  <div className="flex items-center gap-4">
-                    <span className="material-symbols-outlined text-secondary">policy</span>
-                    <span className="text-label-md text-primary">Quy định hoàn tiền</span>
-                  </div>
-                  <span className="material-symbols-outlined text-secondary group-hover:translate-x-1 transition-transform">
-                    arrow_forward
-                  </span>
-                </button>
-                <div className="h-[1px] bg-surface-container mx-6"></div>
-                <button className="flex items-center justify-between p-4 hover:bg-surface-container-low rounded-[32px] transition-colors group">
-                  <div className="flex items-center gap-4">
-                    <span className="material-symbols-outlined text-secondary">quiz</span>
-                    <span className="text-label-md text-primary">Câu hỏi thường gặp (FAQ)</span>
-                  </div>
-                  <span className="material-symbols-outlined text-secondary group-hover:translate-x-1 transition-transform">
-                    arrow_forward
-                  </span>
-                </button>
-                <div className="h-[1px] bg-surface-container mx-6"></div>
-                <button className="flex items-center justify-between p-4 hover:bg-surface-container-low rounded-[32px] transition-colors group">
-                  <div className="flex items-center gap-4">
-                    <span className="material-symbols-outlined text-secondary">support_agent</span>
-                    <span className="text-label-md text-primary">Liên hệ hỗ trợ</span>
-                  </div>
-                  <span className="material-symbols-outlined text-secondary group-hover:translate-x-1 transition-transform">
-                    arrow_forward
-                  </span>
-                </button>
+            {/* Menu Section */}
+            <section className="space-y-3">
+              <h2 className="font-label-md text-secondary px-2 uppercase tracking-widest text-[11px] font-bold">
+                Cài đặt chung
+              </h2>
+              <div className="space-y-2">
+                <MenuItem icon="settings" label="Cài đặt ứng dụng" />
+                <MenuItem icon="description" label="Điều khoản & Dữ liệu" />
+                <MenuItem icon="support_agent" label="Hỗ trợ" />
               </div>
-            </div>
-          </div>
-
-          {/* Logout Section */}
-          <div className="mt-12 mb-8">
-            <button className="w-full py-4 rounded-full border-[1.5px] border-primary text-primary text-label-md hover:bg-primary hover:text-white transition-all active:scale-95 flex items-center justify-center gap-2">
-              <span className="material-symbols-outlined">logout</span>
-              Đăng xuất
-            </button>
-            <p className="text-center mt-6 text-[10px] text-dust-taupe uppercase tracking-[0.2em]">
-              Phiên bản 2.4.0 (Build 88)
-            </p>
-          </div>
-        </div>
+            </section>
+          </>
+        )}
       </main>
 
       <BottomNav />
+    </div>
+  );
+}
+
+function MenuItem({ icon, label }: { icon: string; label: string }) {
+  return (
+    <div className="bg-white border border-surface-container px-6 py-4 rounded-full flex items-center justify-between hover:border-signal-orange group cursor-pointer shadow-sm transition-all duration-300">
+      <div className="flex items-center gap-4">
+        <span className="material-symbols-outlined text-on-surface-variant group-hover:text-signal-orange transition-colors">
+          {icon}
+        </span>
+        <span className="font-label-md text-on-surface">{label}</span>
+      </div>
+      <span className="material-symbols-outlined text-outline-variant">chevron_right</span>
+    </div>
+  );
+}
+
+function GuestProfile() {
+  return (
+    <section className="relative flex flex-col items-center overflow-hidden">
+      <div className="absolute w-32 h-32 -top-2 -right-2 rotate-45 rounded-full border-[1.5px] border-signal-orange border-t-transparent border-l-transparent opacity-40 pointer-events-none"></div>
+      <div className="absolute w-40 h-40 -top-6 -right-6 -rotate-12 rounded-full border-[1.5px] border-signal-orange border-t-transparent border-l-transparent opacity-10 pointer-events-none"></div>
+
+      <div className="relative">
+        <div className="w-28 h-28 rounded-full border-4 border-white shadow-xl overflow-hidden bg-surface-container flex items-center justify-center">
+          <span className="material-symbols-outlined text-outline text-5xl" style={{ fontVariationSettings: "'wght' 200" }}>person</span>
+        </div>
+        <div className="absolute -bottom-1 -right-1 bg-surface-container-highest p-1.5 rounded-full border-2 border-white shadow-lg">
+          <span className="material-symbols-outlined text-secondary text-[16px] font-bold">help</span>
+        </div>
+      </div>
+
+      <div className="mt-4 text-center">
+        <h1 className="font-headline-sm text-headline-sm text-primary font-bold">Khách hàng ẩn danh</h1>
+        <p className="text-secondary font-label-md mt-1 italic">Bạn đang sử dụng phiên bản khách</p>
+      </div>
+
+      <div className="w-full flex flex-col items-center mt-8">
+        <Link
+          href="/auth"
+          className="w-full py-4 rounded-full shadow-lg shadow-signal-orange/20 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3"
+          style={{ background: "linear-gradient(135deg, #FFD700 0%, #CF4500 100%)" }}
+        >
+          <span className="text-white font-bold text-label-md">Mở Ví / Đăng nhập</span>
+          <span className="material-symbols-outlined text-white text-lg">arrow_forward</span>
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+interface Profile {
+  wallet_name: string;
+  email: string;
+}
+
+function LoggedInProfile({ profile, onLogout }: { profile: Profile; onLogout: () => void }) {
+  return (
+    <>
+      {/* Avatar Section */}
+      <section className="relative flex flex-col items-center overflow-hidden">
+        <div className="absolute w-32 h-32 -top-2 -right-2 rotate-45 rounded-full border-[1.5px] border-signal-orange border-t-transparent border-l-transparent opacity-40 pointer-events-none"></div>
+
+        <div className="relative">
+          <div className="w-28 h-28 rounded-full border-4 border-white shadow-xl overflow-hidden bg-gradient-to-br from-signal-orange to-tertiary-fixed-dim flex items-center justify-center">
+            <span className="text-white text-4xl font-bold">{profile.wallet_name.charAt(0).toUpperCase()}</span>
+          </div>
+          <div className="absolute -bottom-1 -right-1 bg-gradient-to-tr from-amber-400 to-yellow-600 p-1.5 rounded-full border-2 border-white shadow-lg">
+            <span className="material-symbols-outlined text-white text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+          </div>
+        </div>
+
+        <div className="mt-4 text-center">
+          <h1 className="font-headline-sm text-headline-sm text-primary font-bold">{profile.wallet_name}</h1>
+          <p className="text-secondary font-label-md mt-1">Ví đã được kích hoạt</p>
+        </div>
+      </section>
+
+      {/* Zalo Support CTA */}
+      <section>
+        <a
+          className="w-full bg-[#0068FF] hover:opacity-90 active:scale-[0.98] transition-all py-4 px-6 rounded-full flex items-center justify-between shadow-lg shadow-blue-500/20 group"
+          href="#"
+        >
+          <div className="flex items-center gap-3">
+            <div className="bg-white/20 p-2 rounded-full">
+              <span className="material-symbols-outlined text-white" style={{ fontVariationSettings: "'wght' 500" }}>support_agent</span>
+            </div>
+            <div>
+              <p className="text-white font-bold leading-tight">Hỗ trợ qua Zalo</p>
+              <p className="text-white/70 text-[12px]">Phản hồi ngay trong 5 phút</p>
+            </div>
+          </div>
+          <div className="bg-white w-10 h-10 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
+            <span className="material-symbols-outlined text-[#0068FF]">arrow_forward</span>
+          </div>
+        </a>
+      </section>
+
+      {/* Menu Section */}
+      <section className="space-y-3">
+        <h2 className="font-label-md text-secondary px-2 uppercase tracking-widest text-[11px] font-bold">
+          Tài khoản & Cài đặt
+        </h2>
+        <div className="space-y-2">
+          <MenuItem icon="person" label="Thông tin cá nhân" />
+          <MenuItem icon="account_balance" label="Liên kết ngân hàng" />
+          <MenuItem icon="security" label="Bảo mật tài khoản" />
+          <MenuItem icon="settings" label="Cài đặt ứng dụng" />
+          <MenuItem icon="description" label="Điều khoản & Dữ liệu" />
+          <MenuItem icon="support_agent" label="Hỗ trợ" />
+        </div>
+      </section>
+
+      {/* Logout Button */}
+      <section>
+        <button onClick={onLogout} className="w-full py-4 text-error font-bold flex items-center justify-center gap-2 hover:bg-error/5 rounded-full transition-colors">
+          <span className="material-symbols-outlined">logout</span>
+          Đăng xuất
+        </button>
+      </section>
     </>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
@@ -9,7 +10,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "SÀNH - Hoàn tiền khi mua sắm",
+  title: "Refundii - Hoàn tiền khi mua sắm",
   description: "Dán link Shopee/TikTok – Nhận lại đến 10% tiền mặt",
 };
 
@@ -27,7 +28,9 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans text-on-surface antialiased min-h-screen overflow-x-hidden bg-surface">
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

@@ -9,16 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        "canvas-cream": "#F3F0EE",
+        "ink-black": "#141413",
+        "light-signal-orange": "#F37338",
         "on-primary": "#ffffff",
         "inverse-on-surface": "#f2f0f0",
-        "surface": "#fbf9f8",
+        "surface": "#F3F0EE",
         "surface-container-low": "#f5f3f3",
         "surface-container-high": "#e9e8e7",
         "on-tertiary-container": "#d85f25",
         "surface-dim": "#dbdad9",
         "outline": "#767872",
         "on-primary-fixed-variant": "#474745",
-        "background": "#fbf9f8",
+        "background": "#F3F0EE",
         "secondary": "#5f5e5d",
         "on-background": "#1b1c1c",
         "on-surface": "#1b1c1c",
@@ -103,10 +106,11 @@ const config: Config = {
         "label-md": ["16px", { lineHeight: "16px", letterSpacing: "-0.03em", fontWeight: "500" }],
       },
       boxShadow: {
-        "nav": "0 8px 32px rgba(0,0,0,0.04)",
-        "card": "0 24px 48px rgba(0,0,0,0.04)",
-        "card-hover": "0 32px 64px rgba(0,0,0,0.08)",
-        "bottom-nav": "0 24px 48px rgba(0,0,0,0.08)",
+        "nav": "0 4px 24px rgba(0,0,0,0.04)",
+        "card": "0 8px 48px rgba(0,0,0,0.04)",
+        "card-hover": "0 16px 64px rgba(0,0,0,0.08)",
+        "bottom-nav": "0 -4px 32px rgba(0,0,0,0.06)",
+        "lifted": "0 2px 16px rgba(0,0,0,0.03)",
       },
       animation: {
         "ticker": "ticker 25s linear infinite",
