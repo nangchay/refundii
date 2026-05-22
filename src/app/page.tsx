@@ -413,6 +413,7 @@ function ProcessingCard({
   onRetry: () => void;
 }) {
   const productTitle = processedProduct?.product.title || "Sản phẩm Shopee";
+  const productImage = processedProduct?.product.image;
   const cashbackDisplay = processedProduct?.cashback.displayText || "~ 15.000đ";
 
   if (processingState === "error") {
@@ -467,9 +468,13 @@ function ProcessingCard({
           <>
             <div className="flex items-center gap-4">
               <div className="w-20 h-20 rounded-2xl overflow-hidden bg-surface-container flex items-center justify-center shrink-0">
-                <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-50 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-signal-orange text-4xl">shopping_bag</span>
-                </div>
+                {productImage ? (
+                  <img src={productImage} alt={productTitle} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-50 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-signal-orange text-4xl">shopping_bag</span>
+                  </div>
+                )}
               </div>
               <div className="flex-1">
                 <h4 className="font-bold text-on-surface line-clamp-2">{productTitle}</h4>

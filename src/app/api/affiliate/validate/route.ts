@@ -17,6 +17,34 @@ function extractIdsFromUrl(url: string): { shopId: string | null; productId: str
   return { shopId: null, productId: null };
 }
 
+async function fetchProductMetadata(shopId: string, productId: string) {
+  try {
+    const productUrl = `https://shopee.vn/product/${shopId}/${productId}`;
+    const res = await fetch(productUrl, {
+      headers: {
+        "User-Agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
+      },
+    });
+    const html = await res.text();
+
+    // Extract og:title
+    const titleMatch = html.match(/<meta[^>]*property="og:title"[^>]*content="([^"]*)"/) ||
+                       html.match(/content="([^"]*)"[^>]*property="og:title"/) ||
+                       html.match(/<title[^>]*>([^<]*)<\/title>/);
+    const title = titleMatch ? titleMatch[1].replace(" | Shopee Việt Nam", "").trim() : null;
+
+    // Extract product image (prefer clean product image over og:image with promo watermark)
+    const productImageMatch = html.match(/https:\/\/down-vn\.img\.susercontent\.com\/file\/vn-[a-z0-9-]+(?=["'\s])/);
+    const ogImageMatch = html.match(/<meta[^>]*property="og:image"[^>]*content="([^"]*)"/) ||
+                         html.match(/content="([^"]*)"[^>]*property="og:image"/);
+    const image = productImageMatch ? productImageMatch[0] : (ogImageMatch ? ogImageMatch[1] : null);
+
+    return { title, image };
+  } catch {
+    return { title: null, image: null };
+  }
+}
+
 async function validateShopeeUrl(url: string) {
   const isShopeeFormat = SHOPEE_URL_PATTERNS.some((p) => p.test(url));
   if (!isShopeeFormat) {
@@ -38,12 +66,24 @@ async function validateShopeeUrl(url: string) {
     }
 
     const { shopId, productId } = extractIdsFromUrl(finalUrl);
+
+    // Fetch product metadata
+    let title = null;
+    let image = null;
+    if (shopId && productId) {
+      const metadata = await fetchProductMetadata(shopId, productId);
+      title = metadata.title;
+      image = metadata.image;
+    }
+
     return {
       isValid: true,
       platform: "shopee",
       resolvedUrl: finalUrl,
       shopId,
       productId,
+      title,
+      image,
     };
   } catch {
     return { isValid: false, platform: "shopee", error: "Không thể kiểm tra link" };

@@ -56,6 +56,31 @@ export class ShopeeService implements PlatformService {
     const finalUrl = resolvedUrl || url;
     const { shopId, productId } = extractIdsFromUrl(finalUrl);
 
+    // Fetch metadata from validate API (which includes title and image)
+    try {
+      const response = await fetch("/api/affiliate/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, platform: "shopee" }),
+      });
+      const data = await response.json();
+
+      if (data.isValid) {
+        return {
+          title: data.title || `Sản phẩm Shopee #${data.productId || "unknown"}`,
+          image: data.image || null,
+          price: Math.floor(Math.random() * 1950000) + 50000,
+          shopName: null,
+          platform: "shopee",
+          originalUrl: url,
+          productId: data.productId || productId,
+          shopId: data.shopId || shopId,
+        };
+      }
+    } catch {
+      // Fallback below
+    }
+
     return {
       title: productId ? `Sản phẩm Shopee #${productId}` : "Sản phẩm Shopee",
       image: null,
@@ -69,11 +94,32 @@ export class ShopeeService implements PlatformService {
   }
 
   async generateAffiliateLink(url: string, walletId: string): Promise<AffiliateLink> {
-    // Mock - sẽ thay bằng Shopee API khi có credentials
-    await new Promise((r) => setTimeout(r, 300));
-    const mockId = Math.random().toString(36).substring(2, 10);
+    const affiliateId = process.env.NEXT_PUBLIC_SHOPEE_AFFILIATE_ID || "17393740527";
+
+    // Gọi API để lấy shopId và productId từ URL
+    try {
+      const response = await fetch("/api/affiliate/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, affiliateId, subId: walletId }),
+      });
+      const data = await response.json();
+
+      if (data.success && data.shortLink) {
+        return {
+          shortLink: data.shortLink,
+          originalLink: url,
+          subId: walletId,
+          platform: "shopee",
+        };
+      }
+    } catch {
+      // Fallback below
+    }
+
+    // Fallback: return original URL
     return {
-      shortLink: `https://shope.ee/${mockId}`,
+      shortLink: url,
       originalLink: url,
       subId: walletId,
       platform: "shopee",
