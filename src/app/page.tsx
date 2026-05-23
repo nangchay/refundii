@@ -158,8 +158,7 @@ export default function HomePage() {
   const handleGoToShopClick = () => {
     if (user && profile) {
       const targetUrl = processedProduct?.affiliateLink.shortLink || link;
-      // Dùng location.href thay vì window.open để tránh bị block popup trên mobile
-      window.location.href = targetUrl;
+      window.open(targetUrl, "_blank", "noopener,noreferrer");
     } else {
       sessionStorage.setItem(AUTH_FLOW_KEY, "true");
       setShowAuthSheet(true);
