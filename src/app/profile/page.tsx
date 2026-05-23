@@ -5,6 +5,17 @@ import BottomNav from "@/components/BottomNav";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 
+const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION || "1.0.0";
+const COMMIT_SHA = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) || "dev";
+
+function VersionInfo() {
+  return (
+    <p className="text-center text-xs text-on-surface-variant/50 mt-4">
+      Phiên bản {APP_VERSION} ({COMMIT_SHA}) • Refundii Vietnam
+    </p>
+  );
+}
+
 export default function ProfilePage() {
   const router = useRouter();
   const { user, profile, loading, signOut } = useAuth();
@@ -73,6 +84,8 @@ export default function ProfilePage() {
                 <MenuItem icon="support_agent" label="Hỗ trợ" />
               </div>
             </section>
+
+            <VersionInfo />
           </>
         )}
       </main>
@@ -199,6 +212,7 @@ function LoggedInProfile({ profile, onLogout }: { profile: Profile; onLogout: ()
           <span className="material-symbols-outlined">logout</span>
           Đăng xuất
         </button>
+        <VersionInfo />
       </section>
     </>
   );
