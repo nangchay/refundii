@@ -68,22 +68,11 @@ export async function POST(request: NextRequest) {
   const encodedUrl = encodeURIComponent(productUrl);
   const affiliateLink = `https://s.shopee.vn/an_redir?origin_link=${encodedUrl}&affiliate_id=${affiliateId}&sub_id=${subId || ""}`;
 
-  // Get final redirect URL with credential_token
-  try {
-    const res = await fetch(affiliateLink, {
-      method: "HEAD",
-      redirect: "follow",
-      headers: { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)" },
-    });
-    const finalUrl = res.url;
-
-    return NextResponse.json({
-      success: true,
-      shortLink: finalUrl,
-      shopId,
-      productId,
-    });
-  } catch {
-    return NextResponse.json({ success: false, error: "Cannot generate affiliate link" });
-  }
+  // Trả về link an_redir gốc, không cần follow redirect
+  return NextResponse.json({
+    success: true,
+    shortLink: affiliateLink,
+    shopId,
+    productId,
+  });
 }
