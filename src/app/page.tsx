@@ -157,11 +157,10 @@ export default function HomePage() {
 
   const handleGoToShopClick = () => {
     if (user && profile) {
-      // Open affiliate link if available, otherwise original link
       const targetUrl = processedProduct?.affiliateLink.shortLink || link;
-      window.open(targetUrl, "_blank");
+      // Dùng location.href thay vì window.open để tránh bị block popup trên mobile
+      window.location.href = targetUrl;
     } else {
-      // Đánh dấu đang trong auth flow để giữ link sau login
       sessionStorage.setItem(AUTH_FLOW_KEY, "true");
       setShowAuthSheet(true);
     }
